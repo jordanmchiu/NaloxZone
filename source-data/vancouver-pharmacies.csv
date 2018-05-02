@@ -1,0 +1,52 @@
+City,Address,Name,Latitude,Longitude,Training
+Vancouver BC,5591 West Boulevard,Kerrisdale Pharmacy,49.23572,-123.155837,TRUE
+Vancouver BC,2957 West Broadway,Pharmasave,49.264313,-123.171605,TRUE
+Vancouver BC,5791 Oak Street,Pharmasave,49.233151,-123.128422,TRUE
+Vancouver BC,1070 Howe Street,Pharmasave,49.278972,-123.12515,TRUE
+Vancouver BC,101 1160 Burrard Street,Pharmasave,49.279317,-123.128326,TRUE
+Vancouver BC,2597 West Broadway,Pharmasave,49.264194,-123.164521,TRUE
+Vancouver BC,2733 West Broadway,Safeway,49.264429,-123.167172,TRUE
+Vancouver BC,555 West 12th Avenue,Safeway,49.260988,-123.116495,TRUE
+Vancouver BC,1766 Robson Street,Safeway,49.290564,-123.134579,TRUE
+Vancouver BC,3410 Kingsway,Safeway,49.23214,-123.03323,TRUE
+Vancouver BC,1641 Davie Street,Safeway,49.285479,-123.138854,TRUE
+Vancouver BC,185-650 West 41st Avenue,Safeway,49.231037,-123.118219,TRUE
+Vancouver BC,990 West 25th Avenue,Safeway,49.2574789,-123.167148,TRUE
+Vancouver BC,2315 West 4th Avenue,Safeway,49.268664,-123.158449,TRUE
+Vancouver BC,4575 West 10th Avenue,Safeway,49.264389,-123.210806,TRUE
+Vancouver BC,4189 Yew Street,Safeway,49.24898,-123.155204,TRUE
+Vancouver BC,1780 East Broadway,Safeway,49.26193,-123.068689,TRUE
+Vancouver BC,8475 Granville Street,Safeway,49.209457,-123.14108,TRUE
+Vancouver BC,6410 Main Street,Naz's Pharmacies And Wellness Pharmacies,49.226532,-123.101345,TRUE
+Vancouver BC,109-805 West Broadway,Naz's Pharmacies And Wellness Pharmacies,49.263829,-123.122283,TRUE
+Vancouver BC,5150 Joyce Street,Naz's Pharmacies And Wellness Pharmacies,49.237793,-123.032085,TRUE
+Vancouver BC,420 Abbott Street,Naz's Pharmacies And Wellness Pharmacies,49.281586,-123.107243,TRUE
+Vancouver BC,710 Granville Street,London Drugs,49.282193,-123.118155,TRUE
+Vancouver BC,525 West Broadway,London Drugs,49.263466,-123.115995,TRUE
+Vancouver BC,2585 East Hastings,London Drugs,49.281283,-123.052477,TRUE
+Vancouver BC,2091 West 42nd Avenue,London Drugs,49.233752,-123.154297,TRUE
+Vancouver BC,1187 Robson Street,London Drugs,49.285915,-123.126401,TRUE
+Vancouver BC,3328 Kingsway,London Drugs,49.232832,-123.035132,TRUE
+Vancouver BC,1650 Davie Street,London Drugs,49.285496,-123.139344,TRUE
+Vancouver BC,5639 Victoria Drive,London Drugs,49.233329,-123.065527,TRUE
+Vancouver BC,2230 West Broadway,London Drugs,49.263733,-123.156272,TRUE
+Vancouver BC,150-351 Abbott Street,London Drugs,49.282546,-123.107579,TRUE
+Vancouver BC,1622 Salt Street,London Drugs,49.271249,-123.105742,TRUE
+Vancouver BC,1530 West 7th Avenue,Regency Prescriptions,49.265271,-123.139561,TRUE
+Vancouver BC,199 East Hastings Street,Owl Drugs,49.281489,-123.099888,TRUE
+Vancouver BC,223 Main Street,Pier Health Resource Centre,49.28276,-123.09982,TRUE
+Vancouver BC,6-3195 Granville Street,Medicine Shoppe,49.257238,-123.139259,FALSE
+Vancouver BC,6410 Main Street,Naz's Prescription Plus Pharmacy,49.226532,-123.101345,FALSE
+Vancouver BC,1403 East King Edward,Save-On-Foods,49.248704,-123.075863,FALSE
+Vancouver BC,5940 University Boulevard,Shoppers Drug Mart,49.266023,-123.245835,FALSE
+Vancouver BC,6305 Fraser Street,Shoppers Drug Mart,49.227214,-123.090966,FALSE
+Vancouver BC,201-748 Burrard Street,Shoppers Drug Mart,49.283468,-123.121989,FALSE
+Vancouver BC,3303 Main Street,Shoppers Drug Mart,49.255461,-123.101747,FALSE
+Vancouver BC,2302 West 4th Avenue,Shoppers Drug Mart,49.267961,-123.157789,FALSE
+Vancouver BC,432 SW Marine Drive,Shoppers Drug Mart,49.210336,-123.115999,FALSE
+Vancouver BC,102-2607 East 49th Avenue,Shoppers Drug Mart,49.225304,-123.054421,FALSE
+Vancouver BC,2730 Oak Street,Shoppers Drug Mart,49.261073,-123.126037,FALSE
+Vancouver BC,2888 Granville Street,Shoppers Drug Mart,49.259957,-123.138273,FALSE
+Vancouver BC,4628 Main Street,Pharmasave,49.243014,-123.100972,FALSE
+Vancouver BC,3277 Cambie Street,Shoppers Drug Mart,49.25652,-123.115523,FALSE
+Vancouver BC,4307 West 10th Avenue,West 10th Medical Pharmacy,49.263871,-123.203641,FALSE

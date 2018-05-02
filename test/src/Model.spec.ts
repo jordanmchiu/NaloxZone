@@ -1,0 +1,35 @@
+import LocationHandler from "../../src/LocationHandler";
+import PharmacyManager from "../../src/PharmacyManager";
+import Location from "../../src/util/Location";
+import * as fs from "fs";
+import "../../node_modules/mocha";
+import { expect } from "chai";
+
+describe("Basic util tests", () => {
+    before(function () {
+        console.log(`Before: ${this.test.parent.title}`);
+    });
+
+    beforeEach(function () {
+        console.log(`BeforeTest: ${this.currentTest.title}`);
+    });
+
+    after(function () {
+        console.log(`After: ${this.test.parent.title}`);
+    });
+
+    afterEach(function () {
+        console.log(`AfterTest: ${this.currentTest.title}`);
+    });
+
+    it("LocationHandler should be instantiated with default location", () => {
+        let defaultLoc: Location = new Location(49.2827, -123.1207, "Vancouver BC");
+        expect(LocationHandler.getInstance().getCurrLoc().address).to.equal(defaultLoc.address);
+        expect(LocationHandler.getInstance().getCurrLoc().lat).to.equal(defaultLoc.lat);
+        expect(LocationHandler.getInstance().getCurrLoc().lon).to.equal(defaultLoc.lon);
+    });
+
+    it("Should construct PharmacyManager with 51 pharmacies in Vancouver", () => {
+        expect(PharmacyManager.getInstance().getPharmacies().length).to.equal(51);
+    })
+});
