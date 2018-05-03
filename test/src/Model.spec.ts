@@ -8,6 +8,9 @@ import { expect } from "chai";
 describe("Basic util tests", () => {
     before(function () {
         console.log(`Before: ${this.test.parent.title}`);
+        if (fs.existsSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH)) {
+            fs.unlinkSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH);
+        }
     });
 
     beforeEach(function () {
@@ -31,5 +34,11 @@ describe("Basic util tests", () => {
 
     it("Should construct PharmacyManager with 51 pharmacies in Vancouver", () => {
         expect(PharmacyManager.getInstance().getPharmacies().length).to.equal(51);
-    })
+        console.log(JSON.stringify(PharmacyManager.getInstance().getPharmacies()[1]));
+    });
+
+    it("Should get list of 51 pharmacies from file", () => {
+        expect(PharmacyManager.getInstance().getPharmacies().length).to.equal(51);
+        console.log(JSON.stringify(PharmacyManager.getInstance().getPharmacies()[1]));
+    });
 });

@@ -5,25 +5,35 @@ var Papa = require("papaparse");
 var fs = require("fs");
 var PharmacyManager = /** @class */ (function () {
     function PharmacyManager() {
-        this.PHARMACY_JSON_DATA_FILEPATH = "./source-data/pharmacy-data.json";
         this.PHARMACY_CSV_DATA_FILEPATH = "./source-data/vancouver-pharmacies.csv";
-        if (!fs.existsSync(this.PHARMACY_JSON_DATA_FILEPATH)) {
+        this.pharmacies = [];
+        if (!fs.existsSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH)) {
             var csvString = fs.readFileSync(this.PHARMACY_CSV_DATA_FILEPATH, "utf8");
-            var pharmacyJSON = Papa.parse(csvString, {
+            var parsedPharmacyJSON = Papa.parse(csvString, {
                 delimiter: ",",
                 header: true
             });
-            this.makePharmaciesFromJSON(pharmacyJSON);
-            fs.writeFileSync(this.PHARMACY_JSON_DATA_FILEPATH, JSON.stringify(this.pharmacies), "utf8");
+            fs.writeFileSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH, JSON.stringify(parsedPharmacyJSON), "utf8");
+            this.makePharmaciesFromJSON(parsedPharmacyJSON.data);
         }
         else {
-            this.pharmacies = JSON.parse(fs.readFileSync(this.PHARMACY_JSON_DATA_FILEPATH, "utf8"));
+            var parsedPharmacyJSON = JSON.parse(fs.readFileSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH, "utf8"));
+            this.pharmacies = parsedPharmacyJSON.data;
         }
     }
-    PharmacyManager.prototype.makePharmaciesFromJSON = function (pharmacyJSON) {
-        for (var _i = 0, pharmacyJSON_1 = pharmacyJSON; _i < pharmacyJSON_1.length; _i++) {
-            var basicPharmObject = pharmacyJSON_1[_i];
-            var p = new Pharmacy_1.default(basicPharmObject.Name, basicPharmObject.Address, basicPharmObject.Training, basicPharmObject.Latitude, basicPharmObject.Longitude);
+    PharmacyManager.prototype.makePharmaciesFromJSON = function (pharmacyArray) {
+        for (var _i = 0, pharmacyArray_1 = pharmacyArray; _i < pharmacyArray_1.length; _i++) {
+            var basicPharmObject = pharmacyArray_1[_i];
+            var training = void 0;
+            if (basicPharmObject.Training === "TRUE") {
+                training = true;
+            }
+            else {
+                training = false;
+            }
+            var lat = Number(basicPharmObject.Latitude);
+            var lon = Number(basicPharmObject.Longitude);
+            var p = new Pharmacy_1.default(basicPharmObject.Name, basicPharmObject.Address, training, lat, lon);
             this.pharmacies.push(p);
         }
     };
@@ -36,6 +46,7 @@ var PharmacyManager = /** @class */ (function () {
     PharmacyManager.prototype.getPharmacies = function () {
         return this.pharmacies;
     };
+    PharmacyManager.PHARMACY_JSON_DATA_FILEPATH = "./source-data/pharmacy-data-papaparse.json";
     return PharmacyManager;
 }());
 exports.default = PharmacyManager;
