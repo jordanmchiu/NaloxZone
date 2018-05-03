@@ -21,6 +21,11 @@ var PharmacyManager = /** @class */ (function () {
             this.pharmacies = parsedPharmacyJSON.data;
         }
     }
+    /**
+     * Builds a list of Pharmacies given a Papaparsed csv data array from
+     * a raw csv data file.
+     * @param pharmacyArray
+     */
     PharmacyManager.prototype.makePharmaciesFromJSON = function (pharmacyArray) {
         for (var _i = 0, pharmacyArray_1 = pharmacyArray; _i < pharmacyArray_1.length; _i++) {
             var basicPharmObject = pharmacyArray_1[_i];

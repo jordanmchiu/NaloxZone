@@ -24,9 +24,9 @@ describe("Basic util tests", function () {
     });
     it("LocationHandler should be instantiated with default location", function () {
         var defaultLoc = new Location_1.default(49.2827, -123.1207, "Vancouver BC");
-        chai_1.expect(LocationHandler_1.default.getInstance().getCurrLoc().address).to.equal(defaultLoc.address);
-        chai_1.expect(LocationHandler_1.default.getInstance().getCurrLoc().lat).to.equal(defaultLoc.lat);
-        chai_1.expect(LocationHandler_1.default.getInstance().getCurrLoc().lon).to.equal(defaultLoc.lon);
+        chai_1.expect(LocationHandler_1.default.getInstance().getCurrLoc().getAddress()).to.equal(defaultLoc.getAddress());
+        chai_1.expect(LocationHandler_1.default.getInstance().getCurrLoc().getLat()).to.equal(defaultLoc.getLat());
+        chai_1.expect(LocationHandler_1.default.getInstance().getCurrLoc().getLon()).to.equal(defaultLoc.getLon());
     });
     it("Should construct PharmacyManager with 51 pharmacies in Vancouver", function () {
         chai_1.expect(PharmacyManager_1.default.getInstance().getPharmacies().length).to.equal(51);

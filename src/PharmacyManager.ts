@@ -4,7 +4,7 @@ import * as fs from "fs";
 
 export default class PharmacyManager {
     private static instance: PharmacyManager;
-    private pharmacies: Pharmacy[];
+    private readonly pharmacies: Pharmacy[];
     public static PHARMACY_JSON_DATA_FILEPATH: string = "./source-data/pharmacy-data-papaparse.json";
     public PHARMACY_CSV_DATA_FILEPATH: string = "./source-data/vancouver-pharmacies.csv";
 
@@ -24,6 +24,11 @@ export default class PharmacyManager {
         }
     }
 
+    /**
+     * Builds a list of Pharmacies given a Papaparsed csv data array from
+     * a raw csv data file.
+     * @param pharmacyArray
+     */
     private makePharmaciesFromJSON(pharmacyArray) {
         for (let basicPharmObject of pharmacyArray) {
             let training: boolean;
@@ -32,7 +37,6 @@ export default class PharmacyManager {
             } else {
                 training = false;
             }
-
             const lat: number = Number(basicPharmObject.Latitude);
             const lon: number = Number(basicPharmObject.Longitude);
             const p: Pharmacy = new Pharmacy(basicPharmObject.Name, basicPharmObject.Address, training, lat, lon);

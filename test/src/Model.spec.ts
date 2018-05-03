@@ -27,9 +27,9 @@ describe("Basic util tests", () => {
 
     it("LocationHandler should be instantiated with default location", () => {
         let defaultLoc: Location = new Location(49.2827, -123.1207, "Vancouver BC");
-        expect(LocationHandler.getInstance().getCurrLoc().address).to.equal(defaultLoc.address);
-        expect(LocationHandler.getInstance().getCurrLoc().lat).to.equal(defaultLoc.lat);
-        expect(LocationHandler.getInstance().getCurrLoc().lon).to.equal(defaultLoc.lon);
+        expect(LocationHandler.getInstance().getCurrLoc().getAddress()).to.equal(defaultLoc.getAddress());
+        expect(LocationHandler.getInstance().getCurrLoc().getLat()).to.equal(defaultLoc.getLat());
+        expect(LocationHandler.getInstance().getCurrLoc().getLon()).to.equal(defaultLoc.getLon());
     });
 
     it("Should construct PharmacyManager with 51 pharmacies in Vancouver", () => {
