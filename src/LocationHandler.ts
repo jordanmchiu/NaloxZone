@@ -1,5 +1,6 @@
 import Pharmacy from "./util/Pharmacy";
 import Location from "./util/Location";
+import PharmacyManager from "./PharmacyManager";
 
 export default class LocationHandler {
     private static instance: LocationHandler;
@@ -21,15 +22,15 @@ export default class LocationHandler {
         return this.instance;
     }
 
-    getNearest(loc: Location): Pharmacy[] {
+    public getNearest(loc: Location): Pharmacy[] {
         return []; // stub
     }
 
-    setCurrLoc(loc: Location) {
-        // stub
+    public setCurrLoc(loc: Location) {
+        this.currLoc = loc;
     }
 
-    getCurrLoc(): Location {
+    public getCurrLoc(): Location {
         return this.currLoc;
     }
 
@@ -56,7 +57,7 @@ export default class LocationHandler {
 
     /**
      * Given a current location, returns a list of pharmacies in PharmacyManager
-     * ordered from first to last by distance from current location within MAX_DISTANCE km.
+     * ordered from first to last by distance from current location.
      *
      * Currently uses selection sort since there are few pharmacies.  Can use more efficient
      * algorithm later.
@@ -65,6 +66,38 @@ export default class LocationHandler {
      *                          first to last by distance from given location
      */
     public sortByClosest(l: Location): Pharmacy[] {
-        return [] // stub;
+        if (PharmacyManager.getInstance().getPharmacies().length === 0) {
+            return [];
+        }
+        let workingList: Pharmacy[] = PharmacyManager.getInstance().getPharmacies();
+        for (let i = 0; i < workingList.length; i++) {
+            let smallest = i;
+            for (let j: number = i + 1; j < workingList.length; j++) {
+                if (this.distanceToPharmacy(l, workingList[j]) < this.distanceToPharmacy(l, workingList[smallest])) {
+                    smallest = j;
+                }
+            }
+            let temp: Pharmacy = workingList[i];
+            workingList[i] = workingList[smallest];
+            workingList[smallest] = temp;
+        }
+        return workingList;
+    }
+
+    /**
+     * Given a list of pharmacies, remove pharmacies that are more than MAX_DISTANCE km
+     * away from given location.
+     * @param {Location} l          Given location
+     * @param {Pharmacy[]} pList    Given list of pharmacies to remove
+     * @returns {Pharmacy[]}
+     */
+    public removeFarPharmacies(l: Location, pList: Pharmacy[]): Pharmacy[] {
+        let closePharmacies: Pharmacy[] = [];
+        for (let i = 0; i < pList.length; i++) {
+            if (this.distanceToPharmacy(l, pList[i]) <= this.MAX_DISTANCE * 1000) {
+                closePharmacies.push(pList[i]);
+            }
+        }
+        return closePharmacies;
     }
 }

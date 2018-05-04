@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Location_1 = require("./util/Location");
+var PharmacyManager_1 = require("./PharmacyManager");
 var LocationHandler = /** @class */ (function () {
     function LocationHandler() {
         this.PHARMACIES_TO_RETURN = 5;
@@ -19,7 +20,7 @@ var LocationHandler = /** @class */ (function () {
         return []; // stub
     };
     LocationHandler.prototype.setCurrLoc = function (loc) {
-        // stub
+        this.currLoc = loc;
     };
     LocationHandler.prototype.getCurrLoc = function () {
         return this.currLoc;
@@ -44,7 +45,7 @@ var LocationHandler = /** @class */ (function () {
     };
     /**
      * Given a current location, returns a list of pharmacies in PharmacyManager
-     * ordered from first to last by distance from current location within MAX_DISTANCE km.
+     * ordered from first to last by distance from current location.
      *
      * Currently uses selection sort since there are few pharmacies.  Can use more efficient
      * algorithm later.
@@ -53,7 +54,38 @@ var LocationHandler = /** @class */ (function () {
      *                          first to last by distance from given location
      */
     LocationHandler.prototype.sortByClosest = function (l) {
-        return []; // stub;
+        if (PharmacyManager_1.default.getInstance().getPharmacies().length === 0) {
+            return [];
+        }
+        var workingList = PharmacyManager_1.default.getInstance().getPharmacies();
+        for (var i = 0; i < workingList.length; i++) {
+            var smallest = i;
+            for (var j = i + 1; j < workingList.length; j++) {
+                if (this.distanceToPharmacy(l, workingList[j]) < this.distanceToPharmacy(l, workingList[smallest])) {
+                    smallest = j;
+                }
+            }
+            var temp = workingList[i];
+            workingList[i] = workingList[smallest];
+            workingList[smallest] = temp;
+        }
+        return workingList;
+    };
+    /**
+     * Given a list of pharmacies, remove pharmacies that are more than MAX_DISTANCE km
+     * away from given location.
+     * @param {Location} l          Given location
+     * @param {Pharmacy[]} pList    Given list of pharmacies to remove
+     * @returns {Pharmacy[]}
+     */
+    LocationHandler.prototype.removeFarPharmacies = function (l, pList) {
+        var closePharmacies = [];
+        for (var i = 0; i < pList.length; i++) {
+            if (this.distanceToPharmacy(l, pList[i]) <= this.MAX_DISTANCE * 1000) {
+                closePharmacies.push(pList[i]);
+            }
+        }
+        return closePharmacies;
     };
     LocationHandler.RADIUS = 6371000; // radius of earth in metres
     return LocationHandler;

@@ -34,11 +34,25 @@ describe("Basic util tests", () => {
 
     it("Should construct PharmacyManager with 51 pharmacies in Vancouver", () => {
         expect(PharmacyManager.getInstance().getPharmacies().length).to.equal(51);
-        console.log(JSON.stringify(PharmacyManager.getInstance().getPharmacies()[1]));
+        console.log(JSON.stringify(PharmacyManager.getInstance().getPharmacies()[0]));
     });
 
     it("Should get list of 51 pharmacies from file", () => {
         expect(PharmacyManager.getInstance().getPharmacies().length).to.equal(51);
-        console.log(JSON.stringify(PharmacyManager.getInstance().getPharmacies()[1]));
+        console.log(JSON.stringify(PharmacyManager.getInstance().getPharmacies()[0]));
+    });
+
+    it("Should sort pharmacies closest to default location (Downtown Vancouver)", () => {
+        const sortedPharmaciesDT = LocationHandler.getInstance().sortByClosest(new Location(49.2827, -123.1207, "Vancouver BC"));
+        expect(sortedPharmaciesDT.length).to.equal(51);
+        console.log("Closest pharmacy: " + JSON.stringify(sortedPharmaciesDT[0]));
+        console.log("Furthest pharmacy: " + JSON.stringify(sortedPharmaciesDT[50]));
+    });
+
+    it("Should sort pharmacies closest to UBC Shoppers Drug Mart", () => {
+        const sortedPharmaciesUBC = LocationHandler.getInstance().sortByClosest(new Location(49.266023, -123.245835, "Vancouver BC"));
+        expect(sortedPharmaciesUBC.length).to.equal(51);
+        console.log("Closest pharmacy: " + JSON.stringify(sortedPharmaciesUBC[0]));
+        console.log("Furthest pharmacy: " + JSON.stringify(sortedPharmaciesUBC[50]));
     });
 });
