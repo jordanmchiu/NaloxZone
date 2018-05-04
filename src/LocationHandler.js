@@ -6,21 +6,33 @@ var LocationHandler = /** @class */ (function () {
     function LocationHandler() {
         this.PHARMACIES_TO_RETURN = 5;
         this.MAX_DISTANCE = 10; // maximum km from pharmacy to be considered
-        this.DEFAULT_LOCATION = new Location_1.default(49.2827, -123.1207, "Vancouver BC");
-        this.currLoc = this.DEFAULT_LOCATION;
-        // stub
+        this.currLoc = LocationHandler.DEFAULT_LOCATION;
     }
+    // TODO: Handle exceptional cases
     LocationHandler.getInstance = function () {
         if (this.instance === undefined) {
             this.instance = new LocationHandler();
         }
         return this.instance;
     };
-    LocationHandler.prototype.getNearest = function (loc) {
-        return []; // stub
+    /**
+     * Given LocationHandler's current location, returns a list of a maximum of PHARMACIES_TO_RETURN
+     * pharmacies sorted by increasing distance from current location within 10 km.  If trainingNeeded,
+     * only returns pharmacies that provide overdose training.  Otherwise, returns all pharmacies.
+     * @param {boolean} trainingNeeded      Specifies whether only pharmacies providing overdose
+     *                                      training should be returned
+     * @returns {Pharmacy[]}                List of maximum of PHARMACIES_TO_RETURN pharmacies sorted
+     *                                      by increasing distance from this.curLoc
+     */
+    LocationHandler.prototype.getNearest = function (trainingNeeded) {
+        var sortedPharms = this.sortByClosest(this.currLoc);
+        var closePharms = this.removeFarPharmacies(this.currLoc, sortedPharms);
+        return this.filterPharmacies(closePharms, trainingNeeded);
     };
     LocationHandler.prototype.setCurrLoc = function (loc) {
-        this.currLoc = loc;
+        if (loc != null && loc != undefined) {
+            this.currLoc = loc;
+        }
     };
     LocationHandler.prototype.getCurrLoc = function () {
         return this.currLoc;
@@ -87,7 +99,36 @@ var LocationHandler = /** @class */ (function () {
         }
         return closePharmacies;
     };
+    /**
+     * Given a sorted list of pharmacies, returns a maximum of PHARMACIES_TO_RETURN from that list.
+     * If trainingNeeded, only include pharmacies that provide overdose training.  Otherwise include
+     * pharmacies that don't provide overdose training.
+     * @param {Pharmacy[]} pList
+     * @param {boolean} trainingNeeded
+     * @returns {Pharmacy[]}
+     */
+    LocationHandler.prototype.filterPharmacies = function (pList, trainingNeeded) {
+        var filteredPharmacies = [];
+        var i = 0;
+        for (var idx = 0; idx < pList.length; idx++) {
+            if (trainingNeeded) {
+                if (pList[idx].getTraining()) {
+                    filteredPharmacies.push(pList[idx]);
+                    i++;
+                }
+            }
+            else {
+                filteredPharmacies.push(pList[idx]);
+                i++;
+            }
+            if (i >= this.PHARMACIES_TO_RETURN) {
+                break;
+            }
+        }
+        return filteredPharmacies;
+    };
     LocationHandler.RADIUS = 6371000; // radius of earth in metres
+    LocationHandler.DEFAULT_LOCATION = new Location_1.default(49.2827, -123.1207, "Vancouver BC");
     return LocationHandler;
 }());
 exports.default = LocationHandler;

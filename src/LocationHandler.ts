@@ -5,15 +5,16 @@ import PharmacyManager from "./PharmacyManager";
 export default class LocationHandler {
     private static instance: LocationHandler;
     private static RADIUS: number = 6371000;   // radius of earth in metres
+    public static DEFAULT_LOCATION = new Location(49.2827, -123.1207, "Vancouver BC");
     private PHARMACIES_TO_RETURN: number = 5;
     private MAX_DISTANCE: number = 10;   // maximum km from pharmacy to be considered
-    private DEFAULT_LOCATION = new Location(49.2827, -123.1207, "Vancouver BC");
     private currLoc: Location;
 
     private constructor() {
-        this.currLoc = this.DEFAULT_LOCATION;
-        // stub
+        this.currLoc = LocationHandler.DEFAULT_LOCATION;
     }
+
+    // TODO: Handle exceptional cases
 
     public static getInstance(): LocationHandler {
         if (this.instance === undefined) {
@@ -22,12 +23,23 @@ export default class LocationHandler {
         return this.instance;
     }
 
-    public getNearest(loc: Location): Pharmacy[] {
-        return []; // stub
+    /**
+     * Given LocationHandler's current location, returns a list of a maximum of PHARMACIES_TO_RETURN
+     * pharmacies sorted by increasing distance from current location within 10 km.  If trainingNeeded,
+     * only returns pharmacies that provide overdose training.  Otherwise, returns all pharmacies.
+     * @param {boolean} trainingNeeded      Specifies whether only pharmacies providing overdose
+     *                                      training should be returned
+     * @returns {Pharmacy[]}                List of maximum of PHARMACIES_TO_RETURN pharmacies sorted
+     *                                      by increasing distance from this.curLoc
+     */
+    public getNearest(trainingNeeded: boolean): Pharmacy[] {
+        const sortedPharms: Pharmacy[] = this.sortByClosest(this.currLoc);
+        const closePharms: Pharmacy[] = this.removeFarPharmacies(this.currLoc, sortedPharms);
+        return this.filterPharmacies(closePharms, trainingNeeded);
     }
 
     public setCurrLoc(loc: Location) {
-        this.currLoc = loc;
+        if (loc != null && loc != undefined) { this.currLoc = loc; }
     }
 
     public getCurrLoc(): Location {
@@ -99,5 +111,31 @@ export default class LocationHandler {
             }
         }
         return closePharmacies;
+    }
+
+    /**
+     * Given a sorted list of pharmacies, returns a maximum of PHARMACIES_TO_RETURN from that list.
+     * If trainingNeeded, only include pharmacies that provide overdose training.  Otherwise include
+     * pharmacies that don't provide overdose training.
+     * @param {Pharmacy[]} pList
+     * @param {boolean} trainingNeeded
+     * @returns {Pharmacy[]}
+     */
+    public filterPharmacies(pList: Pharmacy[], trainingNeeded: boolean): Pharmacy[] {
+        let filteredPharmacies: Pharmacy[] = [];
+        let i: number = 0;
+        for (let idx = 0; idx < pList.length; idx++) {
+            if (trainingNeeded) {
+                if (pList[idx].getTraining()) {
+                    filteredPharmacies.push(pList[idx]);
+                    i++;
+                }
+            } else {
+                filteredPharmacies.push(pList[idx]);
+                i++;
+            }
+            if (i >= this.PHARMACIES_TO_RETURN) { break; }
+        }
+        return filteredPharmacies;
     }
 }

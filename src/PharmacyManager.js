@@ -23,7 +23,7 @@ var PharmacyManager = /** @class */ (function () {
     }
     /**
      * Builds a list of Pharmacies given a Papaparsed csv data array from
-     * a raw csv data file.
+     * a properly formatted raw csv data file.
      * @param pharmacyArray
      */
     PharmacyManager.prototype.makePharmaciesFromJSON = function (pharmacyArray) {
@@ -33,8 +33,11 @@ var PharmacyManager = /** @class */ (function () {
             if (basicPharmObject.Training === "TRUE") {
                 training = true;
             }
-            else {
+            else if (basicPharmObject.Training === "FALSE") {
                 training = false;
+            }
+            else {
+                throw new Error("CSV improperly formatted: Training is not 'TRUE' or 'FALSE'");
             }
             var lat = Number(basicPharmObject.Latitude);
             var lon = Number(basicPharmObject.Longitude);

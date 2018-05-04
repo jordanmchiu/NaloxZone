@@ -26,7 +26,7 @@ export default class PharmacyManager {
 
     /**
      * Builds a list of Pharmacies given a Papaparsed csv data array from
-     * a raw csv data file.
+     * a properly formatted raw csv data file.
      * @param pharmacyArray
      */
     private makePharmaciesFromJSON(pharmacyArray) {
@@ -34,8 +34,10 @@ export default class PharmacyManager {
             let training: boolean;
             if (basicPharmObject.Training === "TRUE") {
                 training = true;
-            } else {
+            } else if (basicPharmObject.Training === "FALSE") {
                 training = false;
+            } else {
+                throw new Error("CSV improperly formatted: Training is not 'TRUE' or 'FALSE'");
             }
             const lat: number = Number(basicPharmObject.Latitude);
             const lon: number = Number(basicPharmObject.Longitude);
