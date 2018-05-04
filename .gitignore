@@ -1,4 +1,11 @@
+# IDE settings
 .idea/*
+
+# Backup data and personal reference stuff
+source-data/useful-links.txt
+source-data/vancouver-pharmacies-backup.csv
+source-data/GoogleMapsAPIKey.js
+
 # Logs
 logs
 *.log
