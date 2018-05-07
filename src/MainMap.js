@@ -1,8 +1,6 @@
-var React = require("react");
+import React, { Component } from 'react';
 var GoogleMapReact = require("google-map-react");
-var APIKey = require("../source-data/GoogleMapsAPIKey");
-
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+var APIKey = require("./GoogleMapsAPIKey");
 
 class MainMap extends Component {
     static defaultProps = {
@@ -22,13 +20,6 @@ class MainMap extends Component {
                     defaultCenter={this.props.center}
                     defaultZoom={this.props.zoom}
                 >
-                    /*
-                    <AnyReactComponent
-                        lat={59.955413}
-                        lng={30.337844}
-                        text={'Kreyser Avrora'}
-                    />
-                    */
                 </GoogleMapReact>
             </div>
         );
