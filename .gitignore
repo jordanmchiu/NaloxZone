@@ -7,6 +7,7 @@ source-data/vancouver-pharmacies-backup.csv
 source-data/GoogleMapsAPIKey.js
 
 *GoogleMapsAPIKey.js
+*GoogleMapsAPIKey.ts
 
 # Logs
 logs
