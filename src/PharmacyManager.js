@@ -9,12 +9,12 @@ var PharmacyManager = /** @class */ (function () {
         this.pharmacies = [];
         if (!fs.existsSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH)) {
             var csvString = fs.readFileSync(this.PHARMACY_CSV_DATA_FILEPATH, "utf8");
-            var parsedPharmacyJSON = Papa.parse(csvString, {
+            var parsedPharmacyJSONnew = Papa.parse(csvString, {
                 delimiter: ",",
                 header: true
             });
-            fs.writeFileSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH, JSON.stringify(parsedPharmacyJSON), "utf8");
-            this.makePharmaciesFromJSON(parsedPharmacyJSON.data);
+            fs.writeFileSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH, JSON.stringify(parsedPharmacyJSONnew), "utf8");
+            this.makePharmaciesFromJSON(parsedPharmacyJSONnew.data);
         }
         else {
             var parsedPharmacyJSON = JSON.parse(fs.readFileSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH, "utf8"));

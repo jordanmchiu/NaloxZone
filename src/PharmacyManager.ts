@@ -12,12 +12,12 @@ export default class PharmacyManager {
         this.pharmacies = [];
         if (!fs.existsSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH)) {
             const csvString = fs.readFileSync(this.PHARMACY_CSV_DATA_FILEPATH, "utf8");
-            const parsedPharmacyJSON = Papa.parse(csvString, {
+            const parsedPharmacyJSONnew = Papa.parse(csvString, {
                 delimiter: ",",
                 header: true
             });
-            fs.writeFileSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH, JSON.stringify(parsedPharmacyJSON), "utf8");
-            this.makePharmaciesFromJSON(parsedPharmacyJSON.data);
+            fs.writeFileSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH, JSON.stringify(parsedPharmacyJSONnew), "utf8");
+            this.makePharmaciesFromJSON(parsedPharmacyJSONnew.data);
         } else {
             const parsedPharmacyJSON = JSON.parse(fs.readFileSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH, "utf8"));
             this.pharmacies = parsedPharmacyJSON.data;
