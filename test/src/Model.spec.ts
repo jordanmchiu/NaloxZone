@@ -13,9 +13,11 @@ describe("Model unit/integration tests", () => {
 
     before(function () {
         console.log(`Before: ${this.test.parent.title}`);
+        /*
         if (fs.existsSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH)) {
             fs.unlinkSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH);
         }
+        */
     });
 
     beforeEach(function () {

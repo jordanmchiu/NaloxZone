@@ -1,13 +1,20 @@
 import Pharmacy from "./util/Pharmacy";
-import * as Papa from "papaparse";
-import * as fs from "fs";
+import PharmData from "./util/PharmData";
+// import * as Papa from "papaparse";
+// import * as fs from "fs";
 
 export default class PharmacyManager {
     private static instance: PharmacyManager;
     private readonly pharmacies: Pharmacy[];
-    public static PHARMACY_JSON_DATA_FILEPATH: string = "./source-data/pharmacy-data-papaparse.json";
-    public PHARMACY_CSV_DATA_FILEPATH: string = "./source-data/vancouver-pharmacies.csv";
+    // public static PHARMACY_JSON_DATA_FILEPATH: string = "./source-data/pharmacy-data-papaparse.json";
+    // public PHARMACY_CSV_DATA_FILEPATH: string = "./source-data/vancouver-pharmacies.csv";
 
+    /**
+     * NOTE: This constructor should only be used for internal testing.  The modules fs and papaparse
+     * cannot be accessed from the browser.  This constructor would work if a Server was set up, but
+     * that can be done at a later date.
+     */
+    /*
     private constructor() {
         this.pharmacies = [];
         if (!fs.existsSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH)) {
@@ -22,6 +29,15 @@ export default class PharmacyManager {
             const parsedPharmacyJSON = JSON.parse(fs.readFileSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH, "utf8"));
             this.pharmacies = parsedPharmacyJSON.data;
         }
+    }
+    */
+
+    /**
+     * This constructor imports pharmacy data from ./util/PharmData
+     */
+    private constructor() {
+        this.pharmacies = [];
+        this.makePharmaciesFromJSON(PharmData.VAN_PHARM);
     }
 
     /**

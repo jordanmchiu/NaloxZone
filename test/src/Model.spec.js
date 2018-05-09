@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var LocationHandler_1 = require("../../src/LocationHandler");
 var PharmacyManager_1 = require("../../src/PharmacyManager");
 var Location_1 = require("../../src/util/Location");
-var fs = require("fs");
 require("../../node_modules/mocha");
 var chai_1 = require("chai");
 describe("Model unit/integration tests", function () {
@@ -13,9 +12,11 @@ describe("Model unit/integration tests", function () {
     var richmond = new Location_1.default(49.166592, -123.133568, "Richmond, BC");
     before(function () {
         console.log("Before: " + this.test.parent.title);
-        if (fs.existsSync(PharmacyManager_1.default.PHARMACY_JSON_DATA_FILEPATH)) {
-            fs.unlinkSync(PharmacyManager_1.default.PHARMACY_JSON_DATA_FILEPATH);
+        /*
+        if (fs.existsSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH)) {
+            fs.unlinkSync(PharmacyManager.PHARMACY_JSON_DATA_FILEPATH);
         }
+        */
     });
     beforeEach(function () {
         console.log("BeforeTest: " + this.currentTest.title);

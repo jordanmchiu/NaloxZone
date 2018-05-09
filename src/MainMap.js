@@ -33,7 +33,6 @@ class MainMap extends Component {
         super(props);
         this.state = {
             pharmacies: PharmacyManager.getInstance().getPharmacies(),
-            // This may only work if you set up a server...
         }
     }
 
