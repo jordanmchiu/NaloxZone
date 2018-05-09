@@ -4,6 +4,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import GoogleMapReact from 'google-map-react';
 import GoogleMapsAPIKey from "./GoogleMapsAPIKey";
 import PharmacyMarkerTraining from "./markers/PharmacyMarkerTraining";
+import PharmacyMarkerNoTraining from "./markers/PharmacyMarkerNoTraining";
 import PharmacyManager from "./PharmacyManager";
 
 
@@ -37,15 +38,26 @@ class MainMap extends Component {
     }
 
     render() {
-        let Markers = this.state.pharmacies.map((pharmacy, i) => (
+        let PharmsWithTraining = this.state.pharmacies.filter(pharmacy => {return pharmacy.getTraining()});
+        let PharmsWithoutTraining = this.state.pharmacies.filter(pharmacy => {return !pharmacy.getTraining()});
+        let MarkersWithTraining = PharmsWithTraining.map((pharmacy, i) => (
             <PharmacyMarkerTraining
                 // required props
-                key={pharmacy.getName()}
+                key={pharmacy.getLocation().getAddress()}
                 lat={pharmacy.getLocation().getLat()}
                 lng={pharmacy.getLocation().getLon()}
+                text={i + 1}
             />
         ));
-
+        let MarkersWithoutTraining = PharmsWithoutTraining.map((pharmacy, i) => (
+            <PharmacyMarkerNoTraining
+                // required props
+                key={pharmacy.getLocation().getAddress()}
+                lat={pharmacy.getLocation().getLat()}
+                lng={pharmacy.getLocation().getLon()}
+                text={i + 1}
+            />
+        ));
         return (
             // Important! Always set the container height explicitly
             <div style={{ height: '100vh', width: '100%' }}>
@@ -53,7 +65,8 @@ class MainMap extends Component {
                     bootstrapURLKeys={{ key: GoogleMapsAPIKey.API_KEY }}
                     defaultCenter={this.props.center}
                     defaultZoom={this.props.zoom}>
-                    {Markers}
+                    {MarkersWithTraining}
+                    {MarkersWithoutTraining}
                 </GoogleMapReact>
             </div>
         );

@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
-import {PharmacyMarkerTrainingStyle} from './PharmacyMarker_Styles';
+import {PharmacyMarkerNoTrainingStyle} from './PharmacyMarker_Styles';
 
-export default class PharmacyMarkerTraining extends Component {
+export default class PharmacyMarkerNoTraining extends Component {
     static propTypes = {
         text: PropTypes.string
     };
@@ -15,7 +15,7 @@ export default class PharmacyMarkerTraining extends Component {
 
     render() {
         return (
-            <div style={PharmacyMarkerTrainingStyle}>
+            <div style={PharmacyMarkerNoTrainingStyle}>
                 {this.props.text}
             </div>
         );
