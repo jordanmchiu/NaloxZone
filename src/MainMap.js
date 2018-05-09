@@ -5,19 +5,23 @@ import GoogleMapReact from 'google-map-react';
 import GoogleMapsAPIKey from "./GoogleMapsAPIKey";
 import PharmacyMarkerTraining from "./markers/PharmacyMarkerTraining";
 import PharmacyMarkerNoTraining from "./markers/PharmacyMarkerNoTraining";
+import K_SIZE from "./markers/PharmacyMarker_Styles";
 import PharmacyManager from "./PharmacyManager";
 
 
 class MainMap extends Component {
     static propTypes = {
+        /*
         onCenterChange: PropTypes.func,
         onZoomChange: PropTypes.func,
         onBoundsChange: PropTypes.func,
         onMarkerHover: PropTypes.func,
         onChildClick: PropTypes.func,
+        */
         center: PropTypes.array,
         zoom: PropTypes.number,
-        PharmacyMarkerTraining: PropTypes.any
+        PharmacyMarkerTraining: PropTypes.any,
+        PharmacyMarkerNoTraining: PropTypes.any
     };
 
     static defaultProps = {
@@ -64,7 +68,9 @@ class MainMap extends Component {
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: GoogleMapsAPIKey.API_KEY }}
                     defaultCenter={this.props.center}
-                    defaultZoom={this.props.zoom}>
+                    defaultZoom={this.props.zoom}
+                    hoverDistance={16}
+                >
                     {MarkersWithTraining}
                     {MarkersWithoutTraining}
                 </GoogleMapReact>

@@ -1,6 +1,5 @@
 const K_WIDTH = 16;
 const K_HEIGHT = 16;
-
 const PharmacyMarkerTrainingStyle = {
     // initially any map object has left top corner at lat lng coordinates
     // it's on you to set object origin to 0,0 coordinates
@@ -21,8 +20,6 @@ const PharmacyMarkerTrainingStyle = {
 };
 
 const PharmacyMarkerNoTrainingStyle = {
-    // initially any map object has left top corner at lat lng coordinates
-    // it's on you to set object origin to 0,0 coordinates
     position: 'absolute',
     width: K_WIDTH,
     height: K_HEIGHT,
@@ -39,4 +36,10 @@ const PharmacyMarkerNoTrainingStyle = {
     padding: 4
 };
 
-export {PharmacyMarkerTrainingStyle, PharmacyMarkerNoTrainingStyle};
+const PharmacyMarkerHover = {
+    ...PharmacyMarkerTrainingStyle,
+    backgroundColor: '#006600',
+    color: '#00ff66'
+};
+
+export {PharmacyMarkerTrainingStyle, PharmacyMarkerNoTrainingStyle, PharmacyMarkerHover};
