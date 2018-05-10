@@ -27,11 +27,8 @@ describe("Model unit/integration tests", function () {
     afterEach(function () {
         console.log("AfterTest: " + this.currentTest.title);
     });
-    it("LocationHandler should be instantiated with default location", function () {
-        var defaultLoc = new Location_1.default(49.2827, -123.1207, "Vancouver BC");
-        chai_1.expect(LocationHandler_1.default.getInstance().getCurrLoc().getAddress()).to.equal(defaultLoc.getAddress());
-        chai_1.expect(LocationHandler_1.default.getInstance().getCurrLoc().getLat()).to.equal(defaultLoc.getLat());
-        chai_1.expect(LocationHandler_1.default.getInstance().getCurrLoc().getLon()).to.equal(defaultLoc.getLon());
+    it("LocationHandler - currLoc should be undefined", function () {
+        chai_1.expect(LocationHandler_1.default.getInstance().getCurrLoc()).to.equal(undefined);
     });
     it("Should construct PharmacyManager with 51 pharmacies in Vancouver", function () {
         chai_1.expect(PharmacyManager_1.default.getInstance().getPharmacies().length).to.equal(51);
@@ -42,7 +39,7 @@ describe("Model unit/integration tests", function () {
         console.log(JSON.stringify(PharmacyManager_1.default.getInstance().getPharmacies()[0]));
     });
     it("Should sort pharmacies closest to default location (Downtown Vancouver)", function () {
-        var sortedPharmaciesDT = LocationHandler_1.default.getInstance().sortByClosest(LocationHandler_1.default.DEFAULT_LOCATION);
+        var sortedPharmaciesDT = LocationHandler_1.default.getInstance().sortByClosest(new Location_1.default(49.2827, -123.1207, "Vancouver BC"));
         chai_1.expect(sortedPharmaciesDT.length).to.equal(51);
         console.log("Closest pharmacy: " + JSON.stringify(sortedPharmaciesDT[0]));
         console.log("Furthest pharmacy: " + JSON.stringify(sortedPharmaciesDT[50]));

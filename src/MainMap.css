@@ -1,0 +1,26 @@
+.MainMap-header {
+    background-color: crimson;
+    height: 50px;
+    padding-top: 20px;
+    text-align: center;
+    color: white;
+}
+.enter {
+    display: block;
+    font-size: 18px;
+    padding: 4px;
+    width: 90px;
+    height: 40px;
+}
+.submit {
+    font-size: 18px;
+    padding: 4px;
+    width: 70px;
+    height: 40px;
+}
+.submit-input-location {
+    font-size: 18px;
+    padding: 2px;
+    width: 300px;
+    height: 34px;
+}

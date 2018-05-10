@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import './MainMap.css';
 import PropTypes from 'prop-types';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import GoogleMapReact from 'google-map-react';
 import GoogleMapsAPIKey from "./GoogleMapsAPIKey";
+import LocationHandler from "./LocationHandler";
 import PharmacyMarkerTraining from "./markers/PharmacyMarkerTraining";
 import PharmacyMarkerNoTraining from "./markers/PharmacyMarkerNoTraining";
-import K_SIZE from "./markers/PharmacyMarker_Styles";
-import PharmacyManager from "./PharmacyManager";
+import SearchBox from "./SearchBox";
+// import PharmacyManager from "./PharmacyManager";
 
 
 class MainMap extends Component {
@@ -15,8 +17,8 @@ class MainMap extends Component {
         onCenterChange: PropTypes.func,
         onZoomChange: PropTypes.func,
         onBoundsChange: PropTypes.func,
-        onMarkerHover: PropTypes.func,
         onChildClick: PropTypes.func,
+        onMarkerHover: PropTypes.func,
         */
         center: PropTypes.array,
         zoom: PropTypes.number,
@@ -32,12 +34,22 @@ class MainMap extends Component {
         zoom: 12
     };
 
+    /**
+     * Sets the state's current location given a string
+     * @param locString
+     */
+    setLocation = async (locString) => {
+        this.state.location = await LocationHandler.getInstance().geocodeLocation(locString);
+        LocationHandler.getInstance().setCurrLoc(this.state.location);
+    };
+
     shouldComponentUpdate = shouldPureComponentUpdate;
 
     constructor(props) {
         super(props);
         this.state = {
-            pharmacies: PharmacyManager.getInstance().getPharmacies(),
+            pharmacies: LocationHandler.getInstance().getNearest(false),
+            location: undefined,
         }
     }
 
@@ -65,6 +77,8 @@ class MainMap extends Component {
         return (
             // Important! Always set the container height explicitly
             <div style={{ height: '100vh', width: '100%' }}>
+                <h1 className="MainMap-header">NaloxZone</h1>
+                <SearchBox setLocation={this.setLocation}/>
                 <GoogleMapReact
                     bootstrapURLKeys={{ key: GoogleMapsAPIKey.API_KEY }}
                     defaultCenter={this.props.center}

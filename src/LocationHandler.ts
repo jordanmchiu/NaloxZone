@@ -1,17 +1,23 @@
 import Pharmacy from "./util/Pharmacy";
 import Location from "./util/Location";
 import PharmacyManager from "./PharmacyManager";
+import { createClient, GoogleMapsClient } from "@google/maps";
+import GoogleMapsAPIKey from "./GoogleMapsAPIKey";
 
 export default class LocationHandler {
     private static instance: LocationHandler;
     private static RADIUS: number = 6371000;   // radius of earth in metres
-    public static DEFAULT_LOCATION = new Location(49.2827, -123.1207, "Vancouver BC");
+    // public static DEFAULT_LOCATION = new Location(49.2827, -123.1207, "Vancouver BC");
     private PHARMACIES_TO_RETURN: number = 5;
     private MAX_DISTANCE: number = 10;   // maximum km from pharmacy to be considered
     private currLoc: Location;
+    private geoCoder = GoogleMapsClient;
 
     private constructor() {
-        this.currLoc = LocationHandler.DEFAULT_LOCATION;
+        this.geoCoder = createClient({
+            key: GoogleMapsAPIKey.API_KEY,
+        });
+        this.currLoc = undefined;
     }
 
     // TODO: Handle exceptional cases
@@ -33,13 +39,17 @@ export default class LocationHandler {
      *                                      by increasing distance from this.curLoc
      */
     public getNearest(trainingNeeded: boolean): Pharmacy[] {
-        const sortedPharms: Pharmacy[] = this.sortByClosest(this.currLoc);
-        const closePharms: Pharmacy[] = this.removeFarPharmacies(this.currLoc, sortedPharms);
-        return this.filterPharmacies(closePharms, trainingNeeded);
+        if (this.currLoc === undefined) {
+            return PharmacyManager.getInstance().getPharmacies();
+        } else {
+            const sortedPharms: Pharmacy[] = this.sortByClosest(this.currLoc);
+            const closePharms: Pharmacy[] = this.removeFarPharmacies(this.currLoc, sortedPharms);
+            return this.filterPharmacies(closePharms, trainingNeeded);
+        }
     }
 
     public setCurrLoc(loc: Location) {
-        if (loc != null && loc != undefined) { this.currLoc = loc; }
+        if (loc !== null && loc !== undefined) { this.currLoc = loc; }
     }
 
     public getCurrLoc(): Location {
@@ -137,5 +147,30 @@ export default class LocationHandler {
             if (i >= this.PHARMACIES_TO_RETURN) { break; }
         }
         return filteredPharmacies;
+    }
+
+    /**
+     * Get Location from given address as string
+     * @param address
+     */
+    async geocodeLocation(address: string): Promise<Location> {
+        let lat;
+        let lon;
+        return new Promise<Location>((resolve, reject) => {
+            // stub
+        });
+        /*
+        return new Promise(this.geoCoder.geocode({
+            address: address
+        }, function(err, response) {
+            if (!err) {
+                lat = response.json.results[0].geometry.location.lat;
+                lon = response.json.results[0].geometry.location.lng;
+                return new Location(lat, lon, address);
+            }
+            })
+        );
+        */
+
     }
 }
