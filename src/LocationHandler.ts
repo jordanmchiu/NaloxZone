@@ -148,29 +148,4 @@ export default class LocationHandler {
         }
         return filteredPharmacies;
     }
-
-    /**
-     * Get Location from given address as string
-     * @param address
-     */
-    async geocodeLocation(address: string): Promise<Location> {
-        let lat;
-        let lon;
-        return new Promise<Location>((resolve, reject) => {
-            // stub
-        });
-        /*
-        return new Promise(this.geoCoder.geocode({
-            address: address
-        }, function(err, response) {
-            if (!err) {
-                lat = response.json.results[0].geometry.location.lat;
-                lon = response.json.results[0].geometry.location.lng;
-                return new Location(lat, lon, address);
-            }
-            })
-        );
-        */
-
-    }
 }

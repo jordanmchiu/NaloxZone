@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import './MainMap.css';
 import PropTypes from 'prop-types';
 import shouldPureComponentUpdate from 'react-pure-render/function';
-import GoogleMapReact from 'google-map-react';
+// import GoogleMapReact from 'google-map-react';
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import GoogleMapsAPIKey from "./GoogleMapsAPIKey";
 import LocationHandler from "./LocationHandler";
-import PharmacyMarkerTraining from "./markers/PharmacyMarkerTraining";
-import PharmacyMarkerNoTraining from "./markers/PharmacyMarkerNoTraining";
+// import PharmacyMarkerTraining from "./markers/PharmacyMarkerTraining";
+// import PharmacyMarkerNoTraining from "./markers/PharmacyMarkerNoTraining";
 import SearchBox from "./SearchBox";
 // import PharmacyManager from "./PharmacyManager";
 
 
-class MainMap extends Component {
+export class MainMap extends Component {
     static propTypes = {
         /*
         onCenterChange: PropTypes.func,
@@ -22,8 +23,8 @@ class MainMap extends Component {
         */
         center: PropTypes.array,
         zoom: PropTypes.number,
-        PharmacyMarkerTraining: PropTypes.any,
-        PharmacyMarkerNoTraining: PropTypes.any
+        // PharmacyMarkerTraining: PropTypes.any,
+        // PharmacyMarkerNoTraining: PropTypes.any
     };
 
     static defaultProps = {
@@ -32,6 +33,7 @@ class MainMap extends Component {
             lng: -123.1207
         },
         zoom: 12
+
     };
 
     /**
@@ -50,10 +52,31 @@ class MainMap extends Component {
         this.state = {
             pharmacies: LocationHandler.getInstance().getNearest(false),
             location: undefined,
+            activeMarker: {},
+            selectedPlace: {},
+            showingInfoWindow: false
         }
     }
 
+    onMarkerClick = (props, marker, e) => {
+        this.setState({
+            activeMarker: marker,
+            selectedPlace: props,
+            showingInfoWindow: true
+        })
+    };
+
+    onMapClicked = (props) => {
+        if (this.state.showingInfoWindow) {
+            this.setState({
+                showingInfoWindow: false,
+                activeMarker: null
+            })
+        }
+    };
+
     render() {
+        /*
         let PharmsWithTraining = this.state.pharmacies.filter(pharmacy => {return pharmacy.getTraining()});
         let PharmsWithoutTraining = this.state.pharmacies.filter(pharmacy => {return !pharmacy.getTraining()});
         let MarkersWithTraining = PharmsWithTraining.map((pharmacy, i) => (
@@ -74,23 +97,42 @@ class MainMap extends Component {
                 text={i + 1}
             />
         ));
+        */
+        let Markers = LocationHandler.getInstance().getNearest(false).map((pharmacy) => (
+            <Marker
+                name={pharmacy.getName()}
+                title={pharmacy.getLocation().getAddress()}
+                position={{lat: pharmacy.getLocation().getLat(), lng: pharmacy.getLocation().getLon()}}
+                onClick={this.onMarkerClick}
+            />
+        ));
+        const style = {
+            width: '100%',
+            height: '100vh'
+        };
         return (
-            // Important! Always set the container height explicitly
-            <div style={{ height: '100vh', width: '100%' }}>
+            <div style={style}>
                 <h1 className="MainMap-header">NaloxZone</h1>
                 <SearchBox setLocation={this.setLocation}/>
-                <GoogleMapReact
-                    bootstrapURLKeys={{ key: GoogleMapsAPIKey.API_KEY }}
-                    defaultCenter={this.props.center}
-                    defaultZoom={this.props.zoom}
-                    hoverDistance={16}
-                >
-                    {MarkersWithTraining}
-                    {MarkersWithoutTraining}
-                </GoogleMapReact>
+                <Map google={this.props.google}
+                     zoom={this.props.zoom}
+                     initialCenter={this.props.center}
+                     onClick={this.onMapClicked}>
+                    {Markers}
+                    <InfoWindow
+                        marker={this.state.activeMarker}
+                        visible={this.state.showingInfoWindow}>
+                        <div>
+                            <h2>{this.state.selectedPlace.name}</h2>
+                            <p>{this.state.selectedPlace.title}</p>
+                        </div>
+                    </InfoWindow>
+                </Map>
             </div>
-        );
+        )
     }
 }
 
-export default MainMap;
+export default GoogleApiWrapper({
+    apiKey: GoogleMapsAPIKey.API_KEY
+})(MainMap)
