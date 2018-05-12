@@ -46,7 +46,7 @@ export class MainMap extends Component {
         })
     };
 
-    onMapClicked = (props, e) => {
+    onMapClicked = (props, map, e) => {
         console.log('Event', e);
         if (this.state.showingInfoWindow) {
             this.setState({
@@ -54,14 +54,15 @@ export class MainMap extends Component {
                 activeMarker: null
             })
         }
-        let latitude = e.center.lat();
-        let longitude = e.center.lng();
+        let latitude = e.latLng.lat();
+        let longitude = e.latLng.lng();
         let currLoc = new Location(latitude, longitude);
         LocationHandler.getInstance().setCurrLoc(currLoc);
         this.setState({
             location: currLoc,
             pharmacies: LocationHandler.getInstance().getNearest(this.state.trainingOnly)
         });
+        // TODO: Add "Your Location" marker on click
     };
 
     onFilterTraining = (props) => {
@@ -96,6 +97,12 @@ export class MainMap extends Component {
                 onClick={this.onMarkerClick}
             />
         ));
+        let LocationText;
+        if (this.state.location === undefined) {
+            LocationText = <p>Click the map to set your location.</p>
+        } else {
+            LocationText = <p>Your current location: {this.state.location.getLat()}, {this.state.location.getLon()}</p>
+        }
         const style = {
             width: '100%',
             height: '100vh'
@@ -121,7 +128,8 @@ export class MainMap extends Component {
                     </label>
                 </form>
                 <p>
-                    There are {Markers.length} pharmacies within 5km of your current location.
+                    There are {Markers.length} pharmacies within 5km of your current location. <br />
+                    {LocationText}
                 </p>
                 <Map google={this.props.google}
                      zoom={this.props.zoom}
