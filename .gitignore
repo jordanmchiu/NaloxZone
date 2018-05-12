@@ -6,8 +6,12 @@ source-data/useful-links.txt
 source-data/vancouver-pharmacies-backup.csv
 source-data/GoogleMapsAPIKey.js
 
+# Google Maps API Key
 *GoogleMapsAPIKey.js
 *GoogleMapsAPIKey.ts
+
+# Old files that might see the light of day some other time
+old-files/*
 
 # Logs
 logs

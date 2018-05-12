@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var Location_1 = require("./util/Location");
 var PharmacyManager_1 = require("./PharmacyManager");
 var maps_1 = require("@google/maps");
 var GoogleMapsAPIKey_1 = require("./GoogleMapsAPIKey");
@@ -11,6 +12,7 @@ var LocationHandler = /** @class */ (function () {
         this.geoCoder = maps_1.GoogleMapsClient;
         this.geoCoder = maps_1.createClient({
             key: GoogleMapsAPIKey_1.default.API_KEY,
+            Promise: Promise
         });
         this.currLoc = undefined;
     }
@@ -32,7 +34,14 @@ var LocationHandler = /** @class */ (function () {
      */
     LocationHandler.prototype.getNearest = function (trainingNeeded) {
         if (this.currLoc === undefined) {
-            return PharmacyManager_1.default.getInstance().getPharmacies();
+            if (!trainingNeeded) {
+                return PharmacyManager_1.default.getInstance().getPharmacies();
+            }
+            else {
+                return PharmacyManager_1.default.getInstance().getPharmacies().filter(function (pharmacy) {
+                    return pharmacy.getTraining();
+                });
+            }
         }
         else {
             var sortedPharms = this.sortByClosest(this.currLoc);
@@ -137,6 +146,19 @@ var LocationHandler = /** @class */ (function () {
             }
         }
         return filteredPharmacies;
+    };
+    LocationHandler.prototype.geocodeLocation = function (loc) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            _this.geoCoder.geocode({ "address": loc }, function (results, status) {
+                if (status === 'OK') {
+                    resolve(new Location_1.default(results[0].geometry.location.lat, results[0].geometry.location.lng, loc));
+                }
+                else {
+                    reject(new Error("Couldn't find the location " + loc));
+                }
+            });
+        });
     };
     LocationHandler.RADIUS = 6371000; // radius of earth in metres
     return LocationHandler;

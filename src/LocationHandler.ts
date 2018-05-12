@@ -3,6 +3,7 @@ import Location from "./util/Location";
 import PharmacyManager from "./PharmacyManager";
 import { createClient, GoogleMapsClient } from "@google/maps";
 import GoogleMapsAPIKey from "./GoogleMapsAPIKey";
+declare var Promise: any;
 
 export default class LocationHandler {
     private static instance: LocationHandler;
@@ -16,6 +17,7 @@ export default class LocationHandler {
     private constructor() {
         this.geoCoder = createClient({
             key: GoogleMapsAPIKey.API_KEY,
+            Promise: Promise
         });
         this.currLoc = undefined;
     }
@@ -40,7 +42,13 @@ export default class LocationHandler {
      */
     public getNearest(trainingNeeded: boolean): Pharmacy[] {
         if (this.currLoc === undefined) {
-            return PharmacyManager.getInstance().getPharmacies();
+            if (!trainingNeeded) {
+                return PharmacyManager.getInstance().getPharmacies();
+            } else {
+                return PharmacyManager.getInstance().getPharmacies().filter((pharmacy) => {
+                    return pharmacy.getTraining();
+                });
+            }
         } else {
             const sortedPharms: Pharmacy[] = this.sortByClosest(this.currLoc);
             const closePharms: Pharmacy[] = this.removeFarPharmacies(this.currLoc, sortedPharms);
@@ -147,5 +155,17 @@ export default class LocationHandler {
             if (i >= this.PHARMACIES_TO_RETURN) { break; }
         }
         return filteredPharmacies;
+    }
+
+    public geocodeLocation(loc: string): Promise<Location> {
+        return new Promise((resolve, reject) => {
+            this.geoCoder.geocode({"address": loc}, function(results, status) {
+                if (status === 'OK') {
+                    resolve(new Location(results[0].geometry.location.lat, results[0].geometry.location.lng, loc));
+                } else {
+                    reject(new Error("Couldn't find the location " + loc));
+                }
+            })
+        });
     }
 }
