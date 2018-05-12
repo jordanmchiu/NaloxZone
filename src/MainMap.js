@@ -3,7 +3,8 @@ import './MainMap.css';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import GoogleMapsAPIKey from "./GoogleMapsAPIKey";
 import LocationHandler from "./LocationHandler";
-import SearchBox from "./SearchBox";
+import Location from "./util/Location";
+// import SearchBox from "./SearchBox";
 // import PharmacyManager from "./PharmacyManager";
 
 export class MainMap extends Component {
@@ -33,7 +34,8 @@ export class MainMap extends Component {
             activeMarker: {},
             selectedPlace: {},
             showingInfoWindow: false
-        }
+        };
+        this.onMapClicked = this.onMapClicked.bind(this);
     }
 
     onMarkerClick = (props, marker, e) => {
@@ -44,13 +46,22 @@ export class MainMap extends Component {
         })
     };
 
-    onMapClicked = (props) => {
+    onMapClicked = (props, e) => {
+        console.log('Event', e);
         if (this.state.showingInfoWindow) {
             this.setState({
                 showingInfoWindow: false,
                 activeMarker: null
             })
         }
+        let latitude = e.center.lat();
+        let longitude = e.center.lng();
+        let currLoc = new Location(latitude, longitude);
+        LocationHandler.getInstance().setCurrLoc(currLoc);
+        this.setState({
+            location: currLoc,
+            pharmacies: LocationHandler.getInstance().getNearest(this.state.trainingOnly)
+        });
     };
 
     onFilterTraining = (props) => {
@@ -67,9 +78,18 @@ export class MainMap extends Component {
         }
     };
 
+    onShowAll = (props) => {
+        LocationHandler.getInstance().setCurrLoc(undefined);
+        this.setState({
+            location: undefined,
+            pharmacies: LocationHandler.getInstance().getNearest(this.state.trainingOnly)
+        });
+    };
+
     render() {
-        let Markers = this.state.pharmacies.map((pharmacy) => (
+        let Markers = this.state.pharmacies.map((pharmacy, i) => (
             <Marker
+                key={i}
                 name={pharmacy.getName()}
                 title={pharmacy.getLocation().getAddress() + '   |   Training Provided: ' + pharmacy.getTraining()}
                 position={{lat: pharmacy.getLocation().getLat(), lng: pharmacy.getLocation().getLon()}}
@@ -80,14 +100,9 @@ export class MainMap extends Component {
             width: '100%',
             height: '100vh'
         };
-        /*
-        this.props.google.maps.event.addListener("click", function (event) {
-            console.log("New location!  lat: " + event.latLng.lat() + ", lng: " + event.latLng.lng());
-        });
-        */
         return (
             <div style={style}>
-                <h1 className="MainMap-header">NaloxZone</h1>
+                <h1 className="MainMap-header">NaloxZone Vancouver</h1>
                 <form>
                     <label>
                         Only show pharmacies with overdose training:
@@ -96,7 +111,18 @@ export class MainMap extends Component {
                             type='checkbox'
                             onChange={this.onFilterTraining} />
                     </label>
+                    <br/>
+                    <label>
+                        Clear current location (show all pharmacies):
+                        <input
+                            name='showAll'
+                            type='checkbox'
+                            onChange={this.onShowAll} />
+                    </label>
                 </form>
+                <p>
+                    There are {Markers.length} pharmacies within 5km of your current location.
+                </p>
                 <Map google={this.props.google}
                      zoom={this.props.zoom}
                      initialCenter={this.props.center}

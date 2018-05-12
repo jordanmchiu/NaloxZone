@@ -57,7 +57,7 @@ export default class LocationHandler {
     }
 
     public setCurrLoc(loc: Location) {
-        if (loc !== null && loc !== undefined) { this.currLoc = loc; }
+        if (loc !== null) { this.currLoc = loc; }
     }
 
     public getCurrLoc(): Location {

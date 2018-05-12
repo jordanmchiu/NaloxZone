@@ -50,7 +50,7 @@ var LocationHandler = /** @class */ (function () {
         }
     };
     LocationHandler.prototype.setCurrLoc = function (loc) {
-        if (loc !== null && loc !== undefined) {
+        if (loc !== null) {
             this.currLoc = loc;
         }
     };
