@@ -91,12 +91,23 @@ export class MainMap extends Component {
         let Markers = this.state.pharmacies.map((pharmacy, i) => (
             <Marker
                 key={i}
+                label={(i+1).toString()}
                 name={pharmacy.getName()}
                 title={pharmacy.getLocation().getAddress() + '   |   Training Provided: ' + pharmacy.getTraining()}
                 position={{lat: pharmacy.getLocation().getLat(), lng: pharmacy.getLocation().getLon()}}
                 onClick={this.onMarkerClick}
             />
         ));
+        if (this.state.location !== undefined) {
+            Markers.push(
+                <Marker
+                    key={0}
+                    name='Your location'
+                    position={{lat: this.state.location.getLat(), lng: this.state.location.getLon()}}
+                    label={'*'}
+                />
+            )
+        }
         let LocationText;
         if (this.state.location === undefined) {
             LocationText = <p>Click the map to set your location.</p>
