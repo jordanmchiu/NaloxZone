@@ -8,9 +8,9 @@ declare var Promise: any;
 export default class LocationHandler {
     private static instance: LocationHandler;
     private static RADIUS: number = 6371000;   // radius of earth in metres
+    public static MAX_DISTANCE: number = 10;   // maximum km from pharmacy to be considered
     // public static DEFAULT_LOCATION = new Location(49.2827, -123.1207, "Vancouver BC");
     private PHARMACIES_TO_RETURN: number = 5;
-    private MAX_DISTANCE: number = 10;   // maximum km from pharmacy to be considered
     private currLoc: Location;
     private geoCoder = GoogleMapsClient;
 
@@ -124,7 +124,7 @@ export default class LocationHandler {
     public removeFarPharmacies(l: Location, pList: Pharmacy[]): Pharmacy[] {
         let closePharmacies: Pharmacy[] = [];
         for (let i = 0; i < pList.length; i++) {
-            if (this.distanceToPharmacy(l, pList[i]) <= this.MAX_DISTANCE * 1000) {
+            if (this.distanceToPharmacy(l, pList[i]) <= LocationHandler.MAX_DISTANCE * 1000) {
                 closePharmacies.push(pList[i]);
             }
         }
@@ -157,6 +157,7 @@ export default class LocationHandler {
         return filteredPharmacies;
     }
 
+    /*
     public geocodeLocation(loc: string): Promise<Location> {
         return new Promise((resolve, reject) => {
             this.geoCoder.geocode({"address": loc}, function(results, status) {
@@ -168,4 +169,5 @@ export default class LocationHandler {
             })
         });
     }
+    */
 }

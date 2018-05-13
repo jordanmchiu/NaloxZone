@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Location_1 = require("./util/Location");
 var PharmacyManager_1 = require("./PharmacyManager");
 var maps_1 = require("@google/maps");
 var GoogleMapsAPIKey_1 = require("./GoogleMapsAPIKey");
@@ -8,7 +7,6 @@ var LocationHandler = /** @class */ (function () {
     function LocationHandler() {
         // public static DEFAULT_LOCATION = new Location(49.2827, -123.1207, "Vancouver BC");
         this.PHARMACIES_TO_RETURN = 5;
-        this.MAX_DISTANCE = 10; // maximum km from pharmacy to be considered
         this.geoCoder = maps_1.GoogleMapsClient;
         this.geoCoder = maps_1.createClient({
             key: GoogleMapsAPIKey_1.default.API_KEY,
@@ -113,7 +111,7 @@ var LocationHandler = /** @class */ (function () {
     LocationHandler.prototype.removeFarPharmacies = function (l, pList) {
         var closePharmacies = [];
         for (var i = 0; i < pList.length; i++) {
-            if (this.distanceToPharmacy(l, pList[i]) <= this.MAX_DISTANCE * 1000) {
+            if (this.distanceToPharmacy(l, pList[i]) <= LocationHandler.MAX_DISTANCE * 1000) {
                 closePharmacies.push(pList[i]);
             }
         }
@@ -147,20 +145,8 @@ var LocationHandler = /** @class */ (function () {
         }
         return filteredPharmacies;
     };
-    LocationHandler.prototype.geocodeLocation = function (loc) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this.geoCoder.geocode({ "address": loc }, function (results, status) {
-                if (status === 'OK') {
-                    resolve(new Location_1.default(results[0].geometry.location.lat, results[0].geometry.location.lng, loc));
-                }
-                else {
-                    reject(new Error("Couldn't find the location " + loc));
-                }
-            });
-        });
-    };
     LocationHandler.RADIUS = 6371000; // radius of earth in metres
+    LocationHandler.MAX_DISTANCE = 10; // maximum km from pharmacy to be considered
     return LocationHandler;
 }());
 exports.default = LocationHandler;

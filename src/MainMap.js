@@ -6,11 +6,14 @@ import LocationHandler from "./LocationHandler";
 import Location from "./util/Location";
 // import SearchBox from "./SearchBox";
 // import PharmacyManager from "./PharmacyManager";
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import {Button, Alert} from 'react-bootstrap';
 
 export class MainMap extends Component {
     static defaultProps = {
         center: {
-            lat: 49.2827,
+            lat: 49.25713413767744,
             lng: -123.1207
         },
         zoom: 12,
@@ -21,10 +24,12 @@ export class MainMap extends Component {
      * Sets the state's current location given a string
      * @param locString
      */
+    /*
     setLocation = async (locString) => {
         this.state.location = await LocationHandler.getInstance().geocodeLocation(locString);
         LocationHandler.getInstance().setCurrLoc(this.state.location);
     };
+    */
 
     constructor(props) {
         super(props);
@@ -60,9 +65,12 @@ export class MainMap extends Component {
         LocationHandler.getInstance().setCurrLoc(currLoc);
         this.setState({
             location: currLoc,
-            pharmacies: LocationHandler.getInstance().getNearest(this.state.trainingOnly)
+            pharmacies: LocationHandler.getInstance().getNearest(this.state.trainingOnly),
+            center: {
+                lat: latitude,
+                lng: longitude
+            }
         });
-        // TODO: Add "Your Location" marker on click
     };
 
     onFilterTraining = (props) => {
@@ -93,7 +101,9 @@ export class MainMap extends Component {
                 key={i}
                 label={(i+1).toString()}
                 name={pharmacy.getName()}
-                title={pharmacy.getLocation().getAddress() + '   |   Training Provided: ' + pharmacy.getTraining()}
+                content={<p> {pharmacy.getLocation().getAddress()}<br/>
+                    {(pharmacy.getTraining() ? "Overdose training provided" : "Overdose training may NOT be provided")}<br/>
+                    {((this.state.location !== undefined) ? "Distance from current location: " + (LocationHandler.getInstance().distanceToPharmacy(this.state.location, pharmacy) / 1000).toFixed(2) + " km" : "")}</p>}
                 position={{lat: pharmacy.getLocation().getLat(), lng: pharmacy.getLocation().getLon()}}
                 onClick={this.onMarkerClick}
             />
@@ -110,9 +120,9 @@ export class MainMap extends Component {
         }
         let LocationText;
         if (this.state.location === undefined) {
-            LocationText = <p>Click the map to set your location.</p>
+            LocationText = <Alert bsStyle="warning">Click the map to set your location.</Alert>
         } else {
-            LocationText = <p>Your current location: {this.state.location.getLat()}, {this.state.location.getLon()}</p>
+            LocationText = <p>Your current location * : {this.state.location.getLat()}, {this.state.location.getLon()}</p>
         }
         const style = {
             width: '100%',
@@ -121,30 +131,26 @@ export class MainMap extends Component {
         return (
             <div style={style}>
                 <h1 className="MainMap-header">NaloxZone Vancouver</h1>
+                {LocationText}
                 <form>
                     <label>
-                        Only show pharmacies with overdose training:
+                        {'Only show pharmacies with overdose training: '}
                         <input
                             name='trainingOnly'
                             type='checkbox'
                             onChange={this.onFilterTraining} />
                     </label>
-                    <br/>
-                    <label>
-                        Clear current location (show all pharmacies):
-                        <input
-                            name='showAll'
-                            type='checkbox'
-                            onChange={this.onShowAll} />
-                    </label>
                 </form>
                 <p>
-                    There are {Markers.length} pharmacies within 5km of your current location. <br />
-                    {LocationText}
+                    There are {(this.state.location === undefined) ? Markers.length : Markers.length - 1} pharmacies within {LocationHandler.MAX_DISTANCE} km of your current location. <br />
                 </p>
+                <Button bsStyle="primary" onClick={this.onShowAll}>
+                    Reset (clear current location)
+                </Button>
                 <Map google={this.props.google}
                      zoom={this.props.zoom}
                      initialCenter={this.props.center}
+                     center={this.state.center}
                      onClick={this.onMapClicked}>
                     {Markers}
                     <InfoWindow
@@ -152,7 +158,7 @@ export class MainMap extends Component {
                         visible={this.state.showingInfoWindow}>
                         <div>
                             <h2>{this.state.selectedPlace.name}</h2>
-                            <p>{this.state.selectedPlace.title}</p>
+                            <p>{this.state.selectedPlace.content}</p>
                         </div>
                     </InfoWindow>
                 </Map>
