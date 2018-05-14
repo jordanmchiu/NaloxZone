@@ -8,7 +8,8 @@ import Location from "./util/Location";
 // import PharmacyManager from "./PharmacyManager";
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {Button, Alert} from 'react-bootstrap';
+import {Alert, Button, ButtonToolbar, PageHeader} from 'react-bootstrap';
+// import {Route} from 'react-router';
 
 export class MainMap extends Component {
     static defaultProps = {
@@ -72,6 +73,7 @@ export class MainMap extends Component {
             }
         });
     };
+    //<a href={"https://www.stopoverdose.gov.bc.ca/"}> </a>
 
     onFilterTraining = (props) => {
         if (this.state.trainingOnly) {
@@ -130,23 +132,26 @@ export class MainMap extends Component {
         };
         return (
             <div style={style}>
-                <h1 className="MainMap-header">NaloxZone Vancouver</h1>
+                <PageHeader className="MainMap-header">NaloxZone Vancouver</PageHeader>
+                <Alert bsStyle="danger">
+                    <strong>If you suspect an overdose, call 911 right away.</strong>
+                </Alert>
                 {LocationText}
-                <form>
-                    <label>
-                        {'Only show pharmacies with overdose training: '}
-                        <input
-                            name='trainingOnly'
-                            type='checkbox'
-                            onChange={this.onFilterTraining} />
-                    </label>
-                </form>
                 <p>
-                    There are {(this.state.location === undefined) ? Markers.length : Markers.length - 1} pharmacies within {LocationHandler.MAX_DISTANCE} km of your current location. <br />
+                    There are {(this.state.location === undefined) ? Markers.length + " pharmacies displayed."
+                    : Markers.length - 1 + " pharmacies within " + LocationHandler.MAX_DISTANCE + " km of your current location."}
                 </p>
-                <Button bsStyle="primary" onClick={this.onShowAll}>
-                    Reset (clear current location)
-                </Button>
+                <ButtonToolbar>
+                    <Button bsStyle="primary" onClick={this.onShowAll}>
+                        Reset (clear current location)
+                    </Button>
+                    <Button bsStyle="warning" onClick={this.onFilterTraining}>
+                        {(this.state.trainingOnly) ? "Show " : "Hide "} pharmacies that may not provide overdose training
+                    </Button>
+                    <Button bsStyle="danger" href={"https://www.stopoverdose.gov.bc.ca/"}>
+                        Stop Overdose BC (External Link)
+                    </Button>
+                </ButtonToolbar>
                 <Map google={this.props.google}
                      zoom={this.props.zoom}
                      initialCenter={this.props.center}
