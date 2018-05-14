@@ -13,6 +13,9 @@ source-data/GoogleMapsAPIKey.js
 # Old files that might see the light of day some other time
 old-files/*
 
+# Images and Design
+*logo.pptx
+
 # Logs
 logs
 *.log
