@@ -1,4 +1,4 @@
-![NaloxZone-Logo](https://github.com/jordanmchiu/NaloxZone/blob/master/images/Logo.png)
+<img src="https://github.com/jordanmchiu/NaloxZone/blob/master/images/Logo.png" width="1180">
 
 **NaloxZone Vancouver** is a web app that provides a fast and convenient way to locate pharmacies near you that carry
 Naloxone kits and provide overdose training.  It makes use of the Google Maps Platform and data publicly available from
