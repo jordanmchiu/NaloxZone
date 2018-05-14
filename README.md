@@ -19,6 +19,6 @@ same location, you'll see only the pharmacies that provide overdose training:
 
 ## Links
 
-[Stop Overdose BC](https://www.stopoverdose.gov.bc.ca/ "Stop Overdose BC")
-[Toward the Heart](http://towardtheheart.com/naloxone "Find registered sites")
-[Opioid Awareness](http://towardtheheart.com/opioid-od-awareness "BCCDC - Know the signs of overdose")
+* [Stop Overdose BC](https://www.stopoverdose.gov.bc.ca/ "Stop Overdose BC")
+* [Toward the Heart](http://towardtheheart.com/naloxone "Find registered sites")
+* [Opioid Awareness](http://towardtheheart.com/opioid-od-awareness "BCCDC - Know the signs of overdose")
